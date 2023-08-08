@@ -1,4 +1,4 @@
-
+import ClickAndHoldTransition from './ClickAndHoldTransition.js';
 
 const btnTransition = document.querySelector('.click-and-hold.transition');
 const duration = 1000; // 1s
@@ -8,6 +8,7 @@ let colorIdx = 0;
 setBodyColor(colorIdx);
 setBtnTransitionedColor(colorIdx);
 btnTransition.style.setProperty('--duration', duration + 'ms');
+new ClickAndHoldTransition(btnTransition, onHoldEnd, 1000);
 
 function setBodyColor(color) {
     document.body.style.setProperty('--bg-clr', COLORS[color % COLORS.length]);
@@ -17,7 +18,7 @@ function setBtnTransitionedColor(color) {
     btnTransition.style.setProperty('--bg-next-clr',  COLORS[(color + 1) % COLORS.length]);
 }
 
-function callback() {
+function onHoldEnd() {
     colorIdx++;
     setBodyColor(colorIdx);
     setBtnTransitionedColor(colorIdx);
