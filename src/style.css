@@ -6,24 +6,22 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
-    background-color: rgb(var(--bg-clr));
+    background-color: rgba(var(--bg-clr), 0.3);
 }
 
 .click-and-hold {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    position: relative;
+    z-index: 10;
     width: 20rem;
     height: 20rem;
-    padding: 1em;
-    border: 1px solid silver;
+    border: 1px solid rgba(0,0,0,0.3);
     border-radius: 5px;
     box-shadow: 0px 2px 10px 1px rgba(0,0,0,0.5);
     cursor: pointer;
 }
 
 .click-and-hold:hover {
-    background-color: rgb(221, 241, 241);
+    background-color: rgb(var(--bg-clr), 0.4);
 } 
 
 .click-and-hold[data-active-hold] {
@@ -32,12 +30,22 @@ body {
     box-shadow: 0px 2px 4px 1px rgba(0,0,0,0.5);
 }
 
-.click-and-hold.transition[data-active-hold] {
-    transition: background-color var(--duration) linear;
-    background-color: rgb(var(--bg-next-clr));
+.click-and-hold::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    width: 0;
+    border-radius: 4px;
+    background-color: rgb(var(--bg-clr));
+    padding-left: 0%;
 }
 
-.click-and-hold.animation-frame[data-active-hold] {
-    --bg-fill: 0%;
-    background-image: radial-gradient(circle, gold 0%, gold var(--bg-fill), rgba(255,255,255,0) var(--bg-fill));
+.click-and-hold.transition[data-active-hold]::before {
+    transition: padding-left var(--duration) linear;
+    padding-left: 100%;
+}
+
+.click-and-hold.animation-frame[data-active-hold]::before {
+    padding-left: var(--bg-fill);
 }
