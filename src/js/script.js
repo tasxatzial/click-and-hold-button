@@ -10,7 +10,7 @@ let colorIdx = 0;
 setBodyColor();
 btnTr.style.setProperty('--duration', duration + 'ms');
 
-new Transition(btnTr, onHoldCompleteTr, duration);
+Transition(btnTr, onHoldCompleteTr, duration);
 AnimationFrame(btnAF, onHoldRunAF, onHoldCompleteAF, duration);
 
 function setBodyColor() {

@@ -1,61 +1,57 @@
 import KeyboardUtils from './keyboardUtils.js';
 
-export default class ClickAndHold {
-    constructor(element, onHoldCompleted, duration) {
+export default function ClickAndHold(element, onHoldCompleted, duration) {
+    const state = {};
+
+    (function() {
         if (element.hasAttribute('data-click-and-hold')) {
             throw new Error("Element is already a click and hold element");
         }
-        this.onHoldStart = this.onHoldStart.bind(this);
-        this.onHoldEnd = this.onHoldEnd.bind(this);
-        this.keydownListener = this.keydownListener.bind(this);
-        this.element = element;
-        this.duration = duration;
-        this.onHoldCompleted = onHoldCompleted;
-        this.addHoldStartListeners();
-        this.addHoldEndListeners();
+        addHoldStartListeners();
+        addHoldEndListeners();
         element.setAttribute('data-click-and-hold', '');
-    }
+    })();
 
-    keydownListener(e) {
+    function keydownListener(e) {
         if (KeyboardUtils.is_Space(KeyboardUtils.getKeyName(e))) {
-            this.onHoldStart(e);
+            onHoldStart(e);
         }
     }
 
-    addHoldStartListeners() {
-        this.element.addEventListener('keydown', this.keydownListener, {once: true});
+    function addHoldStartListeners() {
+        element.addEventListener('keydown', keydownListener, {once: true});
         ['mousedown', 'touchstart']
-            .forEach(type => this.element.addEventListener(type, this.onHoldStart, {once: true}));
+            .forEach(type => element.addEventListener(type, onHoldStart, {once: true}));
     }
 
-    addHoldEndListeners() {
+    function addHoldEndListeners() {
         ['keyup', 'blur', 'mouseup', 'mouseleave', 'mouseout', 'touchend', 'touchcancel']
-            .forEach(type => this.element.addEventListener(type, this.onHoldEnd));
+            .forEach(type => element.addEventListener(type, onHoldEnd));
     }
     
-    onHoldStart(e) {
+    function onHoldStart(e) {
         e.preventDefault();
-        this.eventType = e.type;
-        this.element.setAttribute('data-active-hold', '');
-        this.durationTimeout = setTimeout(() => {
-            this.onHoldCompleted();
-            this.element.removeAttribute('data-active-hold');
-        }, this.duration);
+        state.eventType = e.type;
+        element.setAttribute('data-active-hold', '');
+        state.durationTimeout = setTimeout(() => {
+            onHoldCompleted();
+            element.removeAttribute('data-active-hold');
+        }, duration);
 
-        this.element.removeEventListener('keydown', this.keydownListener);
+        element.removeEventListener('keydown', keydownListener);
         ['mousedown', 'touchstart']
-            .forEach(type => this.element.removeEventListener(type, this.onHoldStart));
+            .forEach(type => element.removeEventListener(type, onHoldStart));
     }
 
-    onHoldEnd(e) {
+    function onHoldEnd(e) {
         e.preventDefault();
-        if ((this.eventType === 'keydown' && (e.type === 'keyup' || e.type === 'blur')) ||
-            (this.eventType === 'mousedown' && (e.type === 'mouseup' || e.type === 'mouseleave' || e.type === 'mouseout')) ||
-            (this.eventType === 'touchstart' && (e.type === 'touchend' || e.type === 'touchcancel'))) {
-                clearTimeout(this.durationTimeout);
-                this.element.removeAttribute('data-active-hold');
-                this.eventType = null;
-                this.addHoldStartListeners();
+        if ((state.eventType === 'keydown' && (e.type === 'keyup' || e.type === 'blur')) ||
+            (state.eventType === 'mousedown' && (e.type === 'mouseup' || e.type === 'mouseleave' || e.type === 'mouseout')) ||
+            (state.eventType === 'touchstart' && (e.type === 'touchend' || e.type === 'touchcancel'))) {
+                clearTimeout(state.durationTimeout);
+                element.removeAttribute('data-active-hold');
+                state.eventType = null;
+                addHoldStartListeners();
         }
     }
 }
