@@ -1,3 +1,8 @@
+:root {
+    --bg-clr: '255,255,255';
+    --bg-fill: '0%';
+}
+
 body {
     display: flex;
     flex-direction: column;

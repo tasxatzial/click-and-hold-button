@@ -1,5 +1,7 @@
+import KeyboardUtils from './keyboardUtils.js';
+
 export default class ClickAndHold {
-    constructor(element, callback, duration) {
+    constructor(element, onHoldCompleted, duration) {
         if (element.hasAttribute('data-click-and-hold')) {
             throw new Error("Element is already a click and hold element");
         }
@@ -8,7 +10,7 @@ export default class ClickAndHold {
         this.keydownListener = this.keydownListener.bind(this);
         this.element = element;
         this.duration = duration;
-        this.callback = callback;
+        this.onHoldCompleted = onHoldCompleted;
         this.addHoldStartListeners();
         this.addHoldEndListeners();
         element.setAttribute('data-click-and-hold', '');
@@ -36,7 +38,7 @@ export default class ClickAndHold {
         this.eventType = e.type;
         this.element.setAttribute('data-active-hold', '');
         this.durationTimeout = setTimeout(() => {
-            this.callback();
+            this.onHoldCompleted();
             this.element.removeAttribute('data-active-hold');
         }, this.duration);
 

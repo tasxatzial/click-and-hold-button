@@ -1,4 +1,6 @@
-export default function ClickAndHold(element, callbackRun, callbackEnd, duration) {
+import KeyboardUtils from './keyboardUtils.js';
+
+export default function ClickAndHold(element, onHoldRun, onHoldCompleted, duration) {
     const animation = {};
     const state = {};
 
@@ -53,7 +55,7 @@ export default function ClickAndHold(element, callbackRun, callbackEnd, duration
             (state.eventType === 'touchstart' && (e.type === 'touchend' || e.type === 'touchcancel'))) {
                 if (!animation.done) {
                     window.cancelAnimationFrame(animation.timerID);
-                    callbackEnd(false);
+                    onHoldCompleted(false);
                 }
                 element.removeAttribute('data-active-hold');
                 resetAnimation();
@@ -70,14 +72,14 @@ export default function ClickAndHold(element, callbackRun, callbackEnd, duration
     
         if (animation.previousTimeStamp !== timestamp) {
             const count = (elapsed * 100 / duration).toFixed(2)
-            callbackRun(count);
+            onHoldRun(count);
             if (count >= 100) {
                 animation.done = true;
             }
         }
         
         if (animation.done) {
-            callbackEnd(true);
+            onHoldCompleted(true);
             element.removeAttribute('data-active-hold');
         } else {
             animation.previousTimeStamp = timestamp;
