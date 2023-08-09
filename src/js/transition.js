@@ -19,9 +19,9 @@ export default function ClickAndHold(element, onHoldCompleted, duration) {
     }
 
     function addHoldStartListeners() {
-        element.addEventListener('keydown', keydownListener, {once: true});
+        element.addEventListener('keydown', keydownListener);
         ['mousedown', 'touchstart']
-            .forEach(type => element.addEventListener(type, onHoldStart, {once: true}));
+            .forEach(type => element.addEventListener(type, onHoldStart));
     }
 
     function addHoldEndListeners() {
