@@ -1,6 +1,58 @@
 import KeyboardUtils from './keyboardUtils.js';
 
-export default function ClickAndHold(element, onHoldRun, onHoldCompleted, duration) {
+
+/**
+ * Invoked multiple times during the hold phase. It runs ~X times per
+ * second, where X matches the screen refresh rate.
+ * @callback onHoldRun
+ * @param {number} percent
+ *        A number from 0 to ~100 that indicates the percentage of the
+ *        elapsed time until the hold phase is completed.
+ */
+
+/**
+ * Runs when the hold phase is completed or cancelled.
+ * @callback onHoldCompleted
+ * @param {boolean} isComplete
+ *        True only if the hold phase has been completed, else false.
+ */
+
+/**
+ * The returned object of {@link ClickAndHold}.
+ * @typedef {Object} ClickAndHoldAPI
+ * @property {Function} clear
+ *           Removes the click and hold functionality from the element that
+ *           was passed as an argument to {@link ClickAndHold}.
+ */
+
+/**
+ * Adds click and hold functionality to an element.
+ * 
+ * The click phase can be initiated with:
+ * 1) A 'mousedown' or 'touchstart' event.
+ * 2) Press of space key after the element has received focus.
+ * 
+ * The hold phase can be cancelled with:
+ * 1) A 'keyup' event triggered by the release of the space key.
+ * 2) A 'blur' or 'mouseup' or 'mousleave' or 'mouseout' or 'touchend' or
+ *    'touchcancel' event.
+ * 
+ * The function also adds a data-click-and-hold attribute on the element and
+ * a data-active-hold during the hold phase.
+ *
+ * @param {HTMLElement} element
+ *        The target click and hold element.
+ * @param {Function} onHoldRun
+ *        Runs during the hold phase.
+ * @param {Function} onHoldCompleted
+ *        Runs when the hold phase is completed or cancelled.
+ * @param {number} duration
+ *        Time in ms needed for a completed (not cancelled) hold phase.
+ * @return {ClickAndHoldAPI}
+ * @throws {Error}
+ *         If the element already has click and hold functionality.
+ */
+function ClickAndHold(element, onHoldRun, onHoldCompleted, duration) {
     const animation = {};
     const state = {};
 
@@ -114,3 +166,5 @@ export default function ClickAndHold(element, onHoldRun, onHoldCompleted, durati
         clear
     };
 }
+
+export default ClickAndHold;

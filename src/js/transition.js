@@ -1,6 +1,40 @@
 import KeyboardUtils from './keyboardUtils.js';
 
-export default function ClickAndHold(element, onHoldCompleted, duration) {
+
+/**
+ * The returned object of {@link ClickAndHold}.
+ * @typedef {Object} ClickAndHoldAPI
+ * @property {Function} clear
+ *           Removes the click and hold functionality from the element that
+ *           was passed as an argument to {@link ClickAndHold}.
+ */
+
+/**
+ * Adds click and hold functionality to an element.
+ * 
+ * The click phase can be initiated with:
+ * 1) A 'mousedown' or 'touchstart' event.
+ * 2) Press of space key after the element has received focus.
+ * 
+ * The hold phase can be cancelled with:
+ * 1) A 'keyup' event triggered by the release of the space key.
+ * 2) A 'blur' or 'mouseup' or 'mousleave' or 'mouseout' or 'touchend' or
+ *    'touchcancel' event.
+ * 
+ * The function also adds a data-click-and-hold attribute on the element and
+ * a data-active-hold during the hold phase.
+ * 
+ * @param {HTMLElement} element
+ *        The target click and hold element.
+ * @param {Function} onHoldCompleted
+ *        Runs when the hold phase is completed (not cancelled).
+ * @param {number} duration
+ *        Time in ms needed to trigger onHoldCompleted.
+ * @return {ClickAndHoldAPI}
+ * @throws {Error}
+ *         If the element already has click and hold functionality.
+ */
+function ClickAndHold(element, onHoldCompleted, duration) {
     const state = {};
 
     (function() {
@@ -80,3 +114,5 @@ export default function ClickAndHold(element, onHoldCompleted, duration) {
         clear
     };
 }
+
+export default ClickAndHold;
