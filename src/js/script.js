@@ -17,19 +17,22 @@ function setBodyColor() {
     document.body.style.setProperty('--bg-clr', COLORS[colorIdx % COLORS.length]);
 }
 
-function onHoldCompleteTr() {
+function setBodyNextColor() {
     colorIdx++;
     setBodyColor();
+}
+
+function onHoldCompleteTr() {
+    setBodyNextColor();
 }
 
 function onHoldRunAF(count) {
     btnAF.style.setProperty('--bg-fill', count + '%');
 }
 
-function onHoldCompleteAF(hasCompleted) {
+function onHoldCompleteAF(isComplete) {
     btnAF.style.setProperty('--bg-fill', '0%');
-    if (hasCompleted) {
-        colorIdx++;
-        setBodyColor();
+    if (isComplete) {
+        setBodyNextColor();
     }
 }
