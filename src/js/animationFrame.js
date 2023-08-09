@@ -21,15 +21,8 @@ export default function ClickAndHold(element, onHoldRun, onHoldCompleted, durati
         animation.previousTimeStamp = null;
     }
 
-    function addHoldStartListeners() {
-        ['mousedown', 'touchstart']
-            .forEach(type => element.addEventListener(type, onHoldStart));
-        element.addEventListener('keydown', keydownListener);
-    }
-
-    function addHoldEndListeners() {
-        ['keyup', 'blur', 'mouseup', 'mouseleave', 'mouseout', 'touchend', 'touchcancel']
-            .forEach(type => element.addEventListener(type, onHoldEnd));
+    function resetState() {
+        state.eventType = null;
     }
 
     function keydownListener(e) {
@@ -38,13 +31,33 @@ export default function ClickAndHold(element, onHoldRun, onHoldCompleted, durati
         }
     }
 
+    function addHoldStartListeners() {
+        ['mousedown', 'touchstart']
+            .forEach(type => element.addEventListener(type, onHoldStart));
+        element.addEventListener('keydown', keydownListener);
+    }
+
+    function removeHoldStartListeners() {
+        ['mousedown', 'touchstart']
+            .forEach(type => element.removeEventListener(type, onHoldStart));
+        element.removeEventListener('keydown', keydownListener);
+    }
+
+    function addHoldEndListeners() {
+        ['keyup', 'blur', 'mouseup', 'mouseleave', 'mouseout', 'touchend', 'touchcancel']
+            .forEach(type => element.addEventListener(type, onHoldEnd));
+    }
+
+    function removeHoldEndListeners() {
+        ['keyup', 'blur', 'mouseup', 'mouseleave', 'mouseout', 'touchend', 'touchcancel']
+            .forEach(type => element.removeEventListener(type, onHoldEnd));
+    }
+
     function onHoldStart(e) {
         e.preventDefault();
         state.eventType = e.type;
         element.setAttribute('data-active-hold', '');
-        ['mousedown', 'touchstart']
-            .forEach(type => element.removeEventListener(type, onHoldStart));
-        element.removeEventListener('keydown', keydownListener);
+        removeHoldStartListeners();
         window.requestAnimationFrame(step);
     }
 
@@ -59,7 +72,7 @@ export default function ClickAndHold(element, onHoldRun, onHoldCompleted, durati
                 }
                 element.removeAttribute('data-active-hold');
                 resetAnimation();
-                state.eventType = null;
+                resetState();
                 addHoldStartListeners();
         }
     }
@@ -86,4 +99,18 @@ export default function ClickAndHold(element, onHoldRun, onHoldCompleted, durati
             animation.timerID = window.requestAnimationFrame(step);
         }
     }
+
+    function clear() {
+        removeHoldEndListeners();
+        removeHoldStartListeners();
+        window.cancelAnimationFrame(animation.timerID);
+        resetAnimation();
+        resetState();
+        element.removeAttribute('data-active-hold');
+        element.removeAttribute('data-click-and-hold');
+    }
+
+    return {
+        clear
+    };
 }

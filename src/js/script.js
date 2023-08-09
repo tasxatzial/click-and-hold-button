@@ -10,8 +10,8 @@ let colorIdx = 0;
 setBodyColor();
 btnTr.style.setProperty('--duration', duration + 'ms');
 
-Transition(btnTr, onHoldCompleteTr, duration);
-AnimationFrame(btnAF, onHoldRunAF, onHoldCompleteAF, duration);
+const TR = Transition(btnTr, onHoldCompleteTr, duration);
+const AF = AnimationFrame(btnAF, onHoldRunAF, onHoldCompleteAF, duration);
 
 function setBodyColor() {
     document.body.style.setProperty('--bg-clr', COLORS[colorIdx % COLORS.length]);
