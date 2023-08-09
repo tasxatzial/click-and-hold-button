@@ -15,7 +15,7 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
-    background-color: rgba(var(--bg-clr), 0.3);
+    background-color: rgb(var(--bg-clr), 0.4);
 }
 
 .click-and-hold {
@@ -27,9 +27,9 @@ body {
     width: 15rem;
     height: 15rem;
     padding: 1em;
-    border: 1px solid rgba(0,0,0,0.3);
+    border: 1px solid rgb(0,0,0,0.2);
     border-radius: 5px;
-    box-shadow: 0px 2px 10px 1px rgba(0,0,0,0.5);
+    box-shadow: 0px 2px 10px 1px rgb(0,0,0,0.5);
     cursor: pointer;
 }
 
@@ -40,7 +40,7 @@ body {
 .click-and-hold[data-active-hold] {
     position: relative;
     top: 3px;
-    box-shadow: 0px 2px 4px 1px rgba(0,0,0,0.5);
+    box-shadow: 0px 2px 4px 1px rgb(0,0,0,0.5);
 }
 
 .click-and-hold::before {
