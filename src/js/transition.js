@@ -26,7 +26,7 @@ import KeyboardUtils from './keyboardUtils.js';
  * 
  * @param {HTMLElement} element
  *        The target click and hold element.
- * @param {Function} onHoldCompleted
+ * @param {Function} onHoldComplete
  *        Runs when the hold phase is completed (not cancelled).
  * @param {number} duration
  *        Time in ms needed to trigger onHoldCompleted.
@@ -34,17 +34,17 @@ import KeyboardUtils from './keyboardUtils.js';
  * @throws {Error}
  *         If the element already has click and hold functionality.
  */
-function ClickAndHold(element, onHoldCompleted, duration) {
+function ClickAndHold(element, onHoldComplete, duration) {
     const state = {};
-
-    (function() {
-        if (element.hasAttribute('data-click-and-hold')) {
-            throw new Error("Already a click and hold element");
-        }
-        addHoldStartListeners();
-        addHoldEndListeners();
-        element.setAttribute('data-click-and-hold', '');
-    })();
+    if (element.hasAttribute('data-click-and-hold')) {
+        throw new Error("Already a click and hold element");
+    }
+    addHoldStartListeners();
+    addHoldEndListeners();
+    element.setAttribute('data-click-and-hold', '');
+    return {
+        clear
+    };
 
     function resetState() {
         state.eventType = null;
@@ -83,7 +83,7 @@ function ClickAndHold(element, onHoldCompleted, duration) {
         state.eventType = e.type;
         element.setAttribute('data-active-hold', '');
         state.durationTimeout = setTimeout(() => {
-            onHoldCompleted();
+            onHoldComplete();
             element.removeAttribute('data-active-hold');
         }, duration);
         removeHoldStartListeners();
@@ -109,10 +109,6 @@ function ClickAndHold(element, onHoldCompleted, duration) {
         element.removeAttribute('data-active-hold');
         element.removeAttribute('data-click-and-hold');
     }
-
-    return {
-        clear
-    };
 }
 
 export default ClickAndHold;

@@ -12,7 +12,7 @@ import KeyboardUtils from './keyboardUtils.js';
 
 /**
  * Runs when the hold phase is completed or cancelled.
- * @callback onHoldCompleted
+ * @callback onHoldComplete
  * @param {boolean} isComplete
  *        True only if the hold phase has been completed, else false.
  */
@@ -44,7 +44,7 @@ import KeyboardUtils from './keyboardUtils.js';
  *        The target click and hold element.
  * @param {Function} onHoldRun
  *        Runs during the hold phase.
- * @param {Function} onHoldCompleted
+ * @param {Function} onHoldComplete
  *        Runs when the hold phase is completed or cancelled.
  * @param {number} duration
  *        Time in ms needed for a completed (not cancelled) hold phase.
@@ -52,19 +52,19 @@ import KeyboardUtils from './keyboardUtils.js';
  * @throws {Error}
  *         If the element already has click and hold functionality.
  */
-function ClickAndHold(element, onHoldRun, onHoldCompleted, duration) {
+function ClickAndHold(element, onHoldRun, onHoldComplete, duration) {
     const animation = {};
     const state = {};
-
-    (function () {
-        if (element.hasAttribute('data-click-and-hold')) {
-            throw new Error('Already a click and hold element');
-        }
-        resetAnimation();
-        addHoldStartListeners();
-        addHoldEndListeners();
-        element.setAttribute('data-click-and-hold', '');
-    })();
+    if (element.hasAttribute('data-click-and-hold')) {
+        throw new Error('Already a click and hold element');
+    }
+    resetAnimation();
+    addHoldStartListeners();
+    addHoldEndListeners();
+    element.setAttribute('data-click-and-hold', '');
+    return {
+        clear
+    };
 
     function resetAnimation() {
         animation.done = false;
@@ -120,7 +120,7 @@ function ClickAndHold(element, onHoldRun, onHoldCompleted, duration) {
             (state.eventType === 'touchstart' && (e.type === 'touchend' || e.type === 'touchcancel'))) {
                 if (!animation.done) {
                     window.cancelAnimationFrame(animation.timerID);
-                    onHoldCompleted(false);
+                    onHoldComplete(false);
                 }
                 element.removeAttribute('data-active-hold');
                 resetAnimation();
@@ -144,7 +144,7 @@ function ClickAndHold(element, onHoldRun, onHoldCompleted, duration) {
         }
         
         if (animation.done) {
-            onHoldCompleted(true);
+            onHoldComplete(true);
             element.removeAttribute('data-active-hold');
         } else {
             animation.previousTimeStamp = timestamp;
@@ -161,10 +161,6 @@ function ClickAndHold(element, onHoldRun, onHoldCompleted, duration) {
         element.removeAttribute('data-active-hold');
         element.removeAttribute('data-click-and-hold');
     }
-
-    return {
-        clear
-    };
 }
 
 export default ClickAndHold;
