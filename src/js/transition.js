@@ -39,6 +39,7 @@ function ClickAndHold(element, onHoldComplete, duration) {
     if (element.hasAttribute('data-click-and-hold')) {
         throw new Error("Already a click and hold element");
     }
+    resetState();
     addHoldStartListeners();
     addHoldEndListeners();
     element.setAttribute('data-click-and-hold', '');
