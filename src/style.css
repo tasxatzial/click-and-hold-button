@@ -33,9 +33,11 @@ body {
     cursor: pointer;
 }
 
-.click-and-hold:hover {
-    background-color: rgb(var(--bg-clr) / 0.4);
-} 
+@media (hover:hover) {
+    .click-and-hold:hover {
+        background-color: rgb(var(--bg-clr) / 0.4);
+    }
+}
 
 .click-and-hold[data-active-hold] {
     position: relative;
