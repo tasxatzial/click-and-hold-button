@@ -2,7 +2,7 @@ import Transition from './transition.js';
 import AnimationFrame from './animationFrame.js';
 
 
-const COLORS = ['235,185,235', '204,146,247', '168,168,255', '127,199,127', '207,207,122', '252,209,129', '252,146,146'];
+const COLORS = ['235 185 235', '204 146 247', '168 168 255', '127 199 127', '207 207 122', '252 209 129', '252 146 146'];
 const holdDuration = 500; // 500ms
 
 /* Add click and hold functionality based on CSS transition */
