@@ -6,17 +6,17 @@ This simple project demonstrates how to add basic click-and-hold functionality t
 
 ## Implementation
 
-The main difference between the two buttons is the implementation of their animation.
+Two implementations are provided:
 
-In one button the animation is triggered by adding a class to the corresponding element. This starts a simple CSS transition.
+1) In [animationFrame.js](src/js/animationFrame.js) the animation is created by repeated calls of `requestAnimationFrame`.
 
-The animation of the other button is triggered by repeated calls of `requestAnimationFrame`.
+2) In [transition.js](src/js/transition.js) the animation is triggered by adding a class to the corresponding element. This starts a simple CSS transition.
 
 ## Use
 
-[animationFrame.js](src/js/animationFrame.js) and [transition.js](src/js/transition.js) contain the two implementations and explain how to use them.
+The .js files listed above explain how to add click-and-hold functionality to an element.
 
-[script.js](src/js/script.js) is the main entry script that demonstrates their use.
+[script.js](src/js/script.js), [style.css](src/style.css), [index.html](src/index.html) demonstrate how to use each implementation.
 
 ## Run locally
 
