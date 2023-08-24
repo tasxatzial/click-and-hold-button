@@ -21,27 +21,30 @@ import KeyboardUtils from './keyboardUtils.js';
  * The returned object of {@link ClickAndHold}.
  * @typedef {Object} ClickAndHoldAPI
  * @property {Function} clear
- *           Removes the click and hold functionality from the element that
+ *           Removes the click-and-hold functionality from the element that
  *           was passed as an argument to {@link ClickAndHold}.
  */
 
 /**
- * Adds click and hold functionality to an element.
+ * Adds click-and-hold functionality to an element.
  * 
- * The click phase can be initiated with:
- * 1) A 'mousedown' or 'touchstart' event.
- * 2) Press of space key after the element has received focus.
+ * The action can be initiated by:
+ * 1) A 'mousedown' event.
+ * 2) A 'touchstart' event.
+ * 3) A 'keydown' event by the space key.
  * 
- * The hold phase can be cancelled with:
- * 1) A 'keyup' event triggered by the release of the space key.
- * 2) A 'blur' or 'mouseup' or 'mousleave' or 'mouseout' or 'touchend' or
- *    'touchcancel' event.
+ * The action can be cancelled by:
+ * 1) A 'keyup' or 'blur' event if the action was initiated by a 'keydown' event.
+ * 2) A 'mouseup' or 'mouseleave' or 'mouseout' event if the action was initiated
+ * by a 'mousedown' event.
+ * 3) A 'touchend' or 'touchcancel' event if the action was initiated by a
+ * 'touchstart' event.
  * 
  * The function also adds a data-click-and-hold attribute on the element and
  * a data-active-hold during the hold phase.
  *
  * @param {HTMLElement} element
- *        The target click and hold element.
+ *        The target click-and-hold element.
  * @param {Function} onHoldRun
  *        Runs during the hold phase.
  * @param {Function} onHoldComplete
@@ -50,13 +53,13 @@ import KeyboardUtils from './keyboardUtils.js';
  *        Time in ms needed for a completed (not cancelled) hold phase.
  * @return {ClickAndHoldAPI}
  * @throws {Error}
- *         If the element already has click and hold functionality.
+ *         If the element already has click-and-hold functionality.
  */
 function ClickAndHold(element, onHoldRun, onHoldComplete, duration) {
     const animation = {};
     const state = {};
     if (element.hasAttribute('data-click-and-hold')) {
-        throw new Error('Already a click and hold element');
+        throw new Error('Already a click-and-hold element');
     }
     resetAnimation();
     addHoldStartListeners();
