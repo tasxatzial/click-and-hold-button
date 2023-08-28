@@ -58,6 +58,8 @@ import KeyboardUtils from './keyboardUtils.js';
 function ClickAndHold(element, onHoldRun, onHoldComplete, duration) {
     const animation = {};
     const state = {};
+    const startEvents = ['mousedown', 'touchstart', 'keydown'];
+    const endEvents = ['keyup', 'blur', 'mouseup', 'mouseleave', 'mouseout', 'touchend', 'touchcancel'];
     if (element.hasAttribute('data-click-and-hold')) {
         throw new Error('Already a click-and-hold element');
     }
@@ -80,35 +82,26 @@ function ClickAndHold(element, onHoldRun, onHoldComplete, duration) {
         state.eventType = null;
     }
 
-    function keydownListener(e) {
-        if (KeyboardUtils.is_Space(KeyboardUtils.getKeyName(e))) {
-            onHoldStart(e);
-        }
-    }
-
     function addHoldStartListeners() {
-        ['mousedown', 'touchstart']
-            .forEach(type => element.addEventListener(type, onHoldStart));
-        element.addEventListener('keydown', keydownListener);
+        startEvents.forEach(type => element.addEventListener(type, onHoldStart));
     }
 
     function removeHoldStartListeners() {
-        ['mousedown', 'touchstart']
-            .forEach(type => element.removeEventListener(type, onHoldStart));
-        element.removeEventListener('keydown', keydownListener);
+        startEvents.forEach(type => element.removeEventListener(type, onHoldStart));
     }
 
     function addHoldEndListeners() {
-        ['keyup', 'blur', 'mouseup', 'mouseleave', 'mouseout', 'touchend', 'touchcancel']
-            .forEach(type => element.addEventListener(type, onHoldEnd));
+        endEvents.forEach(type => element.addEventListener(type, onHoldEnd));
     }
 
     function removeHoldEndListeners() {
-        ['keyup', 'blur', 'mouseup', 'mouseleave', 'mouseout', 'touchend', 'touchcancel']
-            .forEach(type => element.removeEventListener(type, onHoldEnd));
+        endEvents.forEach(type => element.removeEventListener(type, onHoldEnd));
     }
 
     function onHoldStart(e) {
+        if (e.type === 'keydown' && !KeyboardUtils.is_Space(KeyboardUtils.getKeyName(e))) {
+            return;
+        }
         e.preventDefault();
         state.eventType = e.type;
         element.setAttribute('data-active-hold', '');
