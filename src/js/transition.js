@@ -38,6 +38,7 @@ import KeyboardUtils from './keyboardUtils.js';
  *         If the element already has click-and-hold functionality.
  */
 function ClickAndHold(element, onHoldComplete, duration) {
+    element.style.setProperty('--hold-duration', duration + 'ms');
     const state = {};
     const startEvents = ['mousedown', 'touchstart', 'keydown'];
     const endEvents = ['keyup', 'blur', 'mouseup', 'mouseleave', 'mouseout', 'touchend', 'touchcancel'];
@@ -108,6 +109,7 @@ function ClickAndHold(element, onHoldComplete, duration) {
         resetState();
         element.removeAttribute('data-active-hold');
         element.removeAttribute('data-click-and-hold');
+        element.style.removeProperty('--duration');
     }
 }
 

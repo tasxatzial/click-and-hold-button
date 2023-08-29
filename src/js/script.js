@@ -7,7 +7,6 @@ const holdDuration = 500; // 500ms
 
 /* Add click-and-hold functionality based on CSS transition */
 const btnTr = document.querySelector('.click-and-hold.transition');
-btnTr.style.setProperty('--duration', holdDuration + 'ms');
 const TR = Transition(btnTr, onHoldCompleteTr, holdDuration);
 
 /* Add click-and-hold functionality based on requestAnimationFrame */

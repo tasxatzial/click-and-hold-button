@@ -57,7 +57,7 @@ body {
 }
 
 .click-and-hold.transition[data-active-hold]::before {
-    transition: padding-left var(--duration) linear;
+    transition: padding-left var(--hold-duration) linear;
     padding-left: 100%;
 }
 
