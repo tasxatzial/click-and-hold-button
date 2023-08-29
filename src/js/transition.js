@@ -74,7 +74,7 @@ function ClickAndHold(element, onHoldComplete, duration) {
     }
 
     function onHoldStart(e) {
-        if (e.type === 'keydown' && !KeyboardUtils.is_Space(KeyboardUtils.getKeyName(e))) {
+        if (e.type === 'keydown' && !KeyboardUtils.is_Space(e)) {
             return;
         }
         e.preventDefault();

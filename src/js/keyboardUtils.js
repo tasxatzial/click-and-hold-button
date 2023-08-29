@@ -11,7 +11,8 @@ export default class KeyboardUtils {
         return pressedKey;
     }
 
-    static is_Space(keyName) {
+    static is_Space(event) {
+        const keyName = KeyboardUtils.getKeyName(event);
         return keyName === ' ' || keyName === 'Spacebar';
     }
 }
