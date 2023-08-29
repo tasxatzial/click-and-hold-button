@@ -103,6 +103,9 @@ function ClickAndHold(element, onHoldRun, onHoldComplete, duration) {
             return;
         }
         e.preventDefault();
+        if (e.type === 'mousedown' && e.button !== 0) {
+            return;
+        }
         state.eventType = e.type;
         element.setAttribute('data-active-hold', '');
         removeHoldStartListeners();
@@ -112,7 +115,7 @@ function ClickAndHold(element, onHoldRun, onHoldComplete, duration) {
     function onHoldEnd(e) {
         e.preventDefault();
         if ((state.eventType === 'keydown' && (e.type === 'keyup' || e.type === 'blur')) ||
-            (state.eventType === 'mousedown' && (e.type === 'mouseup' || e.type === 'mouseleave' || e.type === 'mouseout')) ||
+            (state.eventType === 'mousedown' && ((e.type === 'mouseup' && e.button === 0) || e.type === 'mouseleave' || e.type === 'mouseout')) ||
             (state.eventType === 'touchstart' && (e.type === 'touchend' || e.type === 'touchcancel'))) {
                 if (!animation.done) {
                     window.cancelAnimationFrame(animation.timerID);
