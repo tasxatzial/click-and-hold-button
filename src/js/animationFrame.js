@@ -117,11 +117,11 @@ function ClickAndHold(element, onHoldRun, onHoldComplete, duration) {
         if ((state.eventType === 'keydown' && (e.type === 'keyup' || e.type === 'blur')) ||
             (state.eventType === 'mousedown' && ((e.type === 'mouseup' && e.button === 0) || e.type === 'mouseleave' || e.type === 'mouseout')) ||
             (state.eventType === 'touchstart' && (e.type === 'touchend' || e.type === 'touchcancel'))) {
+                element.removeAttribute('data-active-hold');
                 if (!animation.done) {
                     window.cancelAnimationFrame(animation.timerID);
                     onHoldComplete(false);
                 }
-                element.removeAttribute('data-active-hold');
                 resetAnimation();
                 resetState();
                 addHoldStartListeners();
@@ -143,8 +143,8 @@ function ClickAndHold(element, onHoldRun, onHoldComplete, duration) {
         }
         
         if (animation.done) {
-            onHoldComplete(true);
             element.removeAttribute('data-active-hold');
+            onHoldComplete(true);
         } else {
             animation.previousTimeStamp = timestamp;
             animation.timerID = window.requestAnimationFrame(step);
@@ -152,13 +152,13 @@ function ClickAndHold(element, onHoldRun, onHoldComplete, duration) {
     }
 
     function clear() {
+        element.removeAttribute('data-active-hold');
+        element.removeAttribute('data-click-and-hold');
         removeHoldEndListeners();
         removeHoldStartListeners();
         window.cancelAnimationFrame(animation.timerID);
         resetAnimation();
         resetState();
-        element.removeAttribute('data-active-hold');
-        element.removeAttribute('data-click-and-hold');
     }
 }
 

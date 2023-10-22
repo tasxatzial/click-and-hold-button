@@ -84,8 +84,8 @@ function ClickAndHold(element, onHoldComplete, duration) {
         state.eventType = e.type;
         element.setAttribute('data-active-hold', '');
         state.durationTimeout = setTimeout(() => {
-            onHoldComplete();
             element.removeAttribute('data-active-hold');
+            onHoldComplete();
         }, duration);
         removeHoldStartListeners();
     }
@@ -95,21 +95,21 @@ function ClickAndHold(element, onHoldComplete, duration) {
         if ((state.eventType === 'keydown' && (e.type === 'keyup' || e.type === 'blur')) ||
             (state.eventType === 'mousedown' && ((e.type === 'mouseup' && e.button === 0) || e.type === 'mouseleave' || e.type === 'mouseout')) ||
             (state.eventType === 'touchstart' && (e.type === 'touchend' || e.type === 'touchcancel'))) {
-                clearTimeout(state.durationTimeout);
                 element.removeAttribute('data-active-hold');
+                clearTimeout(state.durationTimeout);
                 resetState();
                 addHoldStartListeners();
         }
     }
 
     function clear() {
+        element.removeAttribute('data-active-hold');
+        element.removeAttribute('data-click-and-hold');
+        element.style.removeProperty('--duration');
         removeHoldEndListeners();
         removeHoldStartListeners();
         clearTimeout(state.durationTimeout);
         resetState();
-        element.removeAttribute('data-active-hold');
-        element.removeAttribute('data-click-and-hold');
-        element.style.removeProperty('--duration');
     }
 }
 
