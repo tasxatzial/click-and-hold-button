@@ -77,7 +77,6 @@ function ClickAndHold(element, onHoldComplete, duration) {
         if (e.type === 'keydown' && !KeyboardUtils.is_Space(e)) {
             return;
         }
-        e.preventDefault();
         if (e.type === 'mousedown' && e.button !== 0) {
             return;
         }
