@@ -2,7 +2,7 @@
 
 A click-and-hold button is a user interface element that demands users to click on the button and maintain that click for a specific period before the associated action is executed.
 
-This simple project demonstrates how to add basic click-and-hold functionality to elements using pure Javascript.
+This project demonstrates one way to add basic click-and-hold functionality to elements using vanilla JavaScript.
 
 ## Implementation
 
@@ -11,6 +11,10 @@ Two implementations are provided:
 1) In [animationFrame.js](src/js/animationFrame.js) the animation is created by repeated calls of `requestAnimationFrame`.
 
 2) In [transition.js](src/js/transition.js) the animation is triggered by adding a class to the corresponding element. This starts a simple CSS transition.
+
+## Dependencies
+
+None. The project uses only HTML, CSS, JavaScript.
 
 ## Use
 
