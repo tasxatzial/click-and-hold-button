@@ -15,9 +15,11 @@ setBodyColor();
 const btnTr = document.querySelector('.click-and-hold.transition');
 const TR = Transition(
     btnTr,
-    () => {
-        state.activeColor++;
-        setBodyColor();
+    (isComplete) => {
+        if (isComplete) {
+            state.activeColor++;
+            setBodyColor();
+        }
     },
     holdDuration
 );

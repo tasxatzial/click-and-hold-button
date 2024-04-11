@@ -55,6 +55,7 @@ function ClickAndHold(element, onHoldComplete, duration) {
 
     function resetState() {
         state.eventType = null;
+        state.completed = false;
     }
 
     function addHoldStartListeners() {
@@ -83,8 +84,9 @@ function ClickAndHold(element, onHoldComplete, duration) {
         state.eventType = e.type;
         element.setAttribute('data-active-hold', '');
         state.durationTimeout = setTimeout(() => {
+            state.completed = true;
             element.removeAttribute('data-active-hold');
-            onHoldComplete();
+            onHoldComplete(true);
         }, duration);
         removeHoldStartListeners();
     }
@@ -95,6 +97,9 @@ function ClickAndHold(element, onHoldComplete, duration) {
             (state.eventType === 'mousedown' && ((e.type === 'mouseup' && e.button === 0) || e.type === 'mouseleave' || e.type === 'mouseout')) ||
             (state.eventType === 'touchstart' && (e.type === 'touchend' || e.type === 'touchcancel'))) {
                 element.removeAttribute('data-active-hold');
+                if (!state.completed) {
+                    onHoldComplete(false);
+                }
                 clearTimeout(state.durationTimeout);
                 resetState();
                 addHoldStartListeners();
