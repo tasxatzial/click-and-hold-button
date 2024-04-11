@@ -6,8 +6,9 @@ import KeyboardUtils from './keyboardUtils.js';
  * second, where X matches the screen refresh rate.
  * @callback onHoldRun
  * @param {number} percent
- *        A number from 0 to ~100 that indicates the percentage of the
- *        elapsed time until the hold phase is completed.
+ *        A number that indicates the percentage of the elapsed time
+ *        until the hold phase is completed. Numbers will be evenly
+ *        distributed between 0 and ~100.
  */
 
 /**
