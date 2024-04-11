@@ -18,7 +18,7 @@ In this implementation, the animation is created by repeated calls of `window.re
 
 ### [transition.js](src/js/transition.js)
 
-In this implementation, the animation is triggered using the `data-active-hold` class in CSS. The user needs to define only the function that will run when the hold phase is completed.
+In this implementation, the animation is triggered using the `data-active-hold` class in CSS. The user needs to define only the function that will run when the hold phase is ends. It takes as a parameter a boolean that indicates whether the hold phase is completed.
 
 ## Dependencies
 
@@ -27,8 +27,6 @@ None. The project uses only HTML, CSS, JavaScript.
 ## Use
 
 See [script.js](src/js/script.js), [style.css](src/style.css), [index.html](src/index.html) for a demo use of both implementations.
-
-How to pick between 
 
 ## Run locally
 
