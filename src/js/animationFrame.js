@@ -51,7 +51,7 @@ import KeyboardUtils from './keyboardUtils.js';
  * @param {Function} onHoldComplete
  *        Runs when the hold phase is completed or cancelled.
  * @param {number} duration
- *        Time in ms needed for a completed (not cancelled) hold phase.
+ *        Required duration (ms) for a completed (not cancelled) hold phase.
  * @return {ClickAndHoldAPI}
  * @throws {Error}
  *         If the element already has click-and-hold functionality.

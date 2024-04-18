@@ -1,5 +1,11 @@
 import KeyboardUtils from './keyboardUtils.js';
 
+/**
+ * Runs when the hold phase is completed or cancelled.
+ * @callback onHoldComplete
+ * @param {boolean} isComplete
+ *        True only if the hold phase has been completed, else false.
+ */
 
 /**
  * The returned object of {@link ClickAndHold}.
@@ -30,9 +36,9 @@ import KeyboardUtils from './keyboardUtils.js';
  * @param {HTMLElement} element
  *        The target click-and-hold element.
  * @param {Function} onHoldComplete
- *        Runs when the hold phase is completed (not cancelled).
+ *        Runs when the hold phase is completed or cancelled.
  * @param {number} duration
- *        Time in ms needed to trigger onHoldCompleted.
+ *        Required duration (ms) for a completed (not cancelled) hold phase.
  * @return {ClickAndHoldAPI}
  * @throws {Error}
  *         If the element already has click-and-hold functionality.
