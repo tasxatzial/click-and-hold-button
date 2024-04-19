@@ -2,7 +2,7 @@
 
 A click-and-hold button is a user interface element that demands users to click on the button and maintain that click for a specific period before the associated action is executed.
 
-This project demonstrates one way to add basic click-and-hold functionality to elements using plain JavaScript. Mouse, keyboard, and touch events are supported.
+This project demonstrates how to add basic click-and-hold functionality to elements using plain JavaScript. Mouse, keyboard, and touch events are supported.
 
 ## Implementation
 
