@@ -30,8 +30,10 @@ import KeyboardUtils from './keyboardUtils.js';
  * 3) A 'touchend' or 'touchcancel' event if the action was initiated by a
  * 'touchstart' event.
  * 
- * The function also adds a data-click-and-hold attribute on the element and
- * a data-active-hold during the hold phase.
+ * The function also adds on the element:
+ * 1) A 'data-click-and-hold' attribute.
+ * 2) A '--hold-duration' custom css property (measured in ms).
+ * 3) A 'data-active-hold' attribute during the hold phase.
  * 
  * @param {HTMLElement} element
  *        The target click-and-hold element.
