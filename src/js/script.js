@@ -15,21 +15,19 @@ setBodyColor();
 const btnTr = document.querySelector('.click-and-hold.transition');
 const TR = Transition(
     btnTr,
+    holdDuration,
     (isComplete) => {
         if (isComplete) {
             state.activeColor++;
             setBodyColor();
         }
-    },
-    holdDuration
+    }
 );
 
 /* Add click-and-hold functionality based on requestAnimationFrame */
 const btnAF = document.querySelector('.click-and-hold.animation-frame');
 const AF = AnimationFrame(btnAF,
-    (percent) => {
-        btnAF.style.setProperty('--bg-fill', percent + '%');
-    },
+    holdDuration,
     (isComplete) => {
         btnAF.style.setProperty('--bg-fill', '0%');
         if (isComplete) {
@@ -37,7 +35,9 @@ const AF = AnimationFrame(btnAF,
             setBodyColor();
         }
     },
-    holdDuration
+    (percent) => {
+        btnAF.style.setProperty('--bg-fill', percent + '%');
+    }
 );
 
 function setBodyColor() {

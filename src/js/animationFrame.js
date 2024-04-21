@@ -46,17 +46,18 @@ import KeyboardUtils from './keyboardUtils.js';
  *
  * @param {HTMLElement} element
  *        The target click-and-hold element.
- * @param {Function} onHoldRun
- *        Runs during the hold phase.
- * @param {Function} onHoldComplete
- *        Runs when the hold phase is completed or cancelled.
  * @param {number} duration
  *        Required duration (ms) for a completed (not cancelled) hold phase.
+ * @param {Function} onHoldComplete
+ *        Runs when the hold phase is completed or cancelled.
+ * @param {Function} onHoldRun
+ *        Runs during the hold phase.
  * @return {ClickAndHoldAPI}
  * @throws {Error}
  *         If the element already has click-and-hold functionality.
  */
-function ClickAndHold(element, onHoldRun, onHoldComplete, duration) {
+function ClickAndHold(element, duration, onHoldComplete, onHoldRun = () => {}) {
+    element.style.setProperty('--hold-duration', duration + 'ms');
     const animation = {};
     const state = {};
     const startEvents = ['mousedown', 'touchstart', 'keydown'];
