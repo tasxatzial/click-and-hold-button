@@ -41,6 +41,19 @@ const btn2 = AnimationFrame(
     }
 );
 
+/* requestAnimationFrame + CSS transition */
+const btn3El = document.querySelector('.click-and-hold.animation-frame[data-btn="3"]');
+const btn3 = AnimationFrame(
+    btn3El,
+    holdDuration,
+    (isComplete) => {
+        if (isComplete) {
+            state.activeColor++;
+            setBodyColor();
+        }
+    },
+);
+
 function setBodyColor() {
     document.body.style.setProperty('--bg-clr', COLORS[state.activeColor % COLORS.length]);
 }

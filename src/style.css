@@ -56,8 +56,9 @@ body {
     transform: translateX(0);
 }
 
-/* Animation using animation.js + CSS transition */
-.click-and-hold.animation[data-active-hold][data-btn="1"] .btn-fill {
+/* Animation using (animation.js or animationFrame.js) + CSS transition */
+.click-and-hold.animation[data-active-hold][data-btn="1"] .btn-fill,
+.click-and-hold.animation-frame[data-active-hold][data-btn="3"] .btn-fill {
     transition: transform var(--hold-duration) linear;
     transform: translateX(100%);
 }
