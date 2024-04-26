@@ -12,23 +12,31 @@ Two implementations are provided. In both, the following are added on the button
 * A `data-active-hold` attribute when the hold phase is initiated. The attribute is removed when the hold phase is completed (lasting for at least the specified period) or cancelled (lasting less than the specified period).
 * A `--hold-duration` custom CSS property (measured in ms).
 
+### [animation.js](src/js/animation.js)
+
+In this implementation, the `data-active-hold` class in CSS is the primary mechanism that triggers the animation. The user needs to define:
+
+* A function that will run when the hold phase ends. It takes as a parameter a boolean that indicates whether the hold phase is completed.
+* The hold duration in ms.
+
+The animation can be created using:
+
+* A CSS transition.
+* A CSS animation.
+
 ### [animationFrame.js](src/js/animationFrame.js)
 
-In this implementation, the animation is created by repeated calls of `window.requestAnimationFrame`. The user needs to define:
+This implementation is based on repeated calls of `window.requestAnimationFrame`. The user needs to define:
 
 * An optional function that will repeatedly run during the hold phase. It takes as a parameter a number that indicates the percentage of the elapsed time until the hold phase is completed. The function will run ~X times per second, where X matches the screen refresh rate. So for a period of 0.2 seconds and a refresh rate of 60 Hz, the function will run 0.2 * 60 = ~12 times, and its arguments will be ~12 numbers evenly distributed between 0 and ~100.
-
 * A function that will run when the hold phase ends. It takes as a parameter a boolean that indicates whether the hold phase is completed.
-
 * The hold duration in ms.
 
-### [transition.js](src/js/transition.js)
+The animation can be created using:
 
-In this implementation, the animation is triggered using the `data-active-hold` class in CSS. The user needs to define:
-
-* A function that will run when the hold phase ends. It takes as a parameter a boolean that indicates whether the hold phase is completed.
-
-* The hold duration in ms.
+* The optional function + a CSS transform.
+* A CSS transition.
+* A CSS animation.
 
 ## Dependencies
 
