@@ -8,13 +8,13 @@
     <title>Click and hold buttons</title>
 </head>
 <body>
-    <div class="transition click-and-hold" tabindex="0" aria-label="click and hold button" role="application">
+    <div class="animation click-and-hold" data-btn="1" tabindex="0" aria-label="click and hold button" role="application">
         <div class="btn-fill"></div>
-        <p>Animation using CSS transition</p>
+        <p>CSS transition</p>
     </div>
-    <div class="animation-frame click-and-hold" tabindex="0" aria-label="click and hold button" role="application">
+    <div class="animation-frame click-and-hold" data-btn="2" tabindex="0" aria-label="click and hold button" role="application">
         <div class="btn-fill"></div>
-        <p>Animation using request animation frame</p>
+        <p>Animation frame + CSS transform</p>
     </div>
     <script src="js/script.js" type="module"></script>
 </body>

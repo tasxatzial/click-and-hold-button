@@ -56,12 +56,14 @@ body {
     transform: translateX(0);
 }
 
-.click-and-hold.transition[data-active-hold] .btn-fill {
+/* Animation using animation.js + CSS transition */
+.click-and-hold.animation[data-active-hold][data-btn="1"] .btn-fill {
     transition: transform var(--hold-duration) linear;
     transform: translateX(100%);
 }
 
-.click-and-hold.animation-frame[data-active-hold] .btn-fill {
+/* Animation using animationFrame.js + CSS transform */
+.click-and-hold.animation-frame[data-active-hold][data-btn="2"] .btn-fill {
     transform: translateX(var(--bg-fill));
 }
 

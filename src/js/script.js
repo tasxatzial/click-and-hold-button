@@ -1,4 +1,4 @@
-import Transition from './transition.js';
+import Animation from './animation.js';
 import AnimationFrame from './animationFrame.js';
 
 
@@ -11,10 +11,10 @@ const holdDuration = 500; // 500ms
 /* Set the initial background color of body */
 setBodyColor();
 
-/* Add click-and-hold functionality based on CSS transition */
-const btnTr = document.querySelector('.click-and-hold.transition');
-const TR = Transition(
-    btnTr,
+/* CSS transition */
+const btn1El = document.querySelector('.click-and-hold.animation[data-btn="1"]');
+const btn1 = Animation(
+    btn1El,
     holdDuration,
     (isComplete) => {
         if (isComplete) {
@@ -24,19 +24,20 @@ const TR = Transition(
     }
 );
 
-/* Add click-and-hold functionality based on requestAnimationFrame */
-const btnAF = document.querySelector('.click-and-hold.animation-frame');
-const AF = AnimationFrame(btnAF,
+/* requestAnimationFrame + CSS transform */
+const btn2El = document.querySelector('.click-and-hold.animation-frame[data-btn="2"]');
+const btn2 = AnimationFrame(
+    btn2El,
     holdDuration,
     (isComplete) => {
-        btnAF.style.setProperty('--bg-fill', '0%');
+        btn2El.style.setProperty('--bg-fill', '0%');
         if (isComplete) {
             state.activeColor++;
             setBodyColor();
         }
     },
     (percent) => {
-        btnAF.style.setProperty('--bg-fill', percent + '%');
+        btn2El.style.setProperty('--bg-fill', percent + '%');
     }
 );
 
