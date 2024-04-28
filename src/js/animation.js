@@ -2,10 +2,14 @@ import KeyboardUtils from './keyboardUtils.js';
 
 
 /**
- * Runs when the hold phase is completed or cancelled.
- * @callback onHoldComplete
- * @param {boolean} isComplete
- *        True only if the hold phase has been completed, else false.
+ * Object holding the callbacks of {@link ClickAndHold}.
+ * @typedef {Object} Callbacks
+ * @property {Function} onHoldStart
+ *           Will run when the hold phase starts.
+ * @property {Function} onHoldEnd
+ *           Will run when the hold phase ends.
+ * @property {Function} onHoldCancel
+ *           Will run when the hold phase is cancelled.
  */
 
 /**
@@ -39,13 +43,13 @@ import KeyboardUtils from './keyboardUtils.js';
  * 
  * @param {HTMLElement} rootEl
  *        The root container of the click-and-hold element. 
-* @param {number} duration
+ * @param {number} duration
  *        Required duration (ms) for a completed (not cancelled) hold phase.
- * @param {Function} onHoldComplete
- *        Runs when the hold phase is completed or cancelled.
+ * @param {Callbacks}
  * @return {ClickAndHoldAPI}
  */
-function ClickAndHold(rootEl, duration, onHoldComplete) {
+function ClickAndHold(rootEl, duration, Callbacks) {
+    const {onHoldStart, onHoldComplete, onHoldCancel} = Callbacks;
     const element = createButton();
     let state = initState();
     const startEventsNames = ['mousedown', 'touchstart', 'keydown'];
@@ -93,18 +97,18 @@ function ClickAndHold(rootEl, duration, onHoldComplete) {
     }
 
     function addHoldStartListeners() {
-        startEventsNames.forEach(type => element.addEventListener(type, onHoldStart));
+        startEventsNames.forEach(type => element.addEventListener(type, _onHoldStart));
     }
 
     function removeHoldStartListeners() {
-        startEventsNames.forEach(type => element.removeEventListener(type, onHoldStart));
+        startEventsNames.forEach(type => element.removeEventListener(type, _onHoldStart));
     }
 
     function addHoldEndListeners() {
-        endEventsNames.forEach(type => element.addEventListener(type, onHoldEnd));
+        endEventsNames.forEach(type => element.addEventListener(type, _onHoldEnd));
     }
 
-    function onHoldStart(e) {
+    function _onHoldStart(e) {
         if (e.type === 'keydown' && !KeyboardUtils.is_Space(e)) {
             return;
         }
@@ -113,22 +117,23 @@ function ClickAndHold(rootEl, duration, onHoldComplete) {
         }
         state.eventType = e.type;
         element.setAttribute('data-active-hold', '');
+        onHoldStart();
         state.durationTimeout = setTimeout(() => {
             state.completed = true;
             element.removeAttribute('data-active-hold');
-            onHoldComplete(true);
+            onHoldComplete();
         }, duration);
         removeHoldStartListeners();
     }
 
-    function onHoldEnd(e) {
+    function _onHoldEnd(e) {
         e.preventDefault();
         if ((state.eventType === 'keydown' && (e.type === 'keyup' || e.type === 'blur')) ||
             (state.eventType === 'mousedown' && ((e.type === 'mouseup' && e.button === 0) || e.type === 'mouseleave' || e.type === 'mouseout')) ||
             (state.eventType === 'touchstart' && (e.type === 'touchend' || e.type === 'touchcancel'))) {
                 element.removeAttribute('data-active-hold');
                 if (!state.completed) {
-                    onHoldComplete(false);
+                    onHoldCancel();
                 }
                 clearTimeout(state.durationTimeout);
                 state = initState();
