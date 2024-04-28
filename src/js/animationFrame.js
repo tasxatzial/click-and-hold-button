@@ -87,9 +87,9 @@ function ClickAndHold(btnEl, duration, Callbacks) {
             return;
         }
         state.eventType = e.type;
+        removeHoldStartListeners();
         btnEl.setAttribute('data-active-hold', '');
         onHoldStart();
-        removeHoldStartListeners();
         window.requestAnimationFrame(step);
     }
 
@@ -99,10 +99,10 @@ function ClickAndHold(btnEl, duration, Callbacks) {
             (state.eventType === 'mousedown' && ((e.type === 'mouseup' && e.button === 0) || e.type === 'mouseleave' || e.type === 'mouseout')) ||
             (state.eventType === 'touchstart' && (e.type === 'touchend' || e.type === 'touchcancel'))) {
                 btnEl.removeAttribute('data-active-hold');
+                btnEl.style.setProperty('--complete-percent', '0%');
                 if (!animationState.done) {
                     window.cancelAnimationFrame(animationState.timerID);
                     onHoldCancel();
-                    btnEl.style.setProperty('--complete-percent', '0%');
                 }
                 animationState = initAnimationState();
                 state = initState();
@@ -126,8 +126,8 @@ function ClickAndHold(btnEl, duration, Callbacks) {
         
         if (animationState.done) {
             btnEl.removeAttribute('data-active-hold');
-            onHoldComplete();
             btnEl.style.setProperty('--complete-percent', '0%');
+            onHoldComplete();
         } else {
             animationState.previousTimeStamp = timestamp;
             animationState.timerID = window.requestAnimationFrame(step);
