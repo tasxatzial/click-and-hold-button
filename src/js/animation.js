@@ -13,15 +13,6 @@ import KeyboardUtils from './keyboardUtils.js';
  */
 
 /**
- * The returned object of {@link ClickAndHold}.
- * @typedef {Object} ClickAndHoldAPI
- * @property {Function} setText
- *           Sets the text of the click-and-hold element.
- * @property {Function} setAriaLabel
- *           Sets the aria-label of the click-and-hold element.
- */
-
-/**
  * Adds click-and-hold functionality to an element.
  * 
  * The action can be initiated by:
@@ -38,56 +29,25 @@ import KeyboardUtils from './keyboardUtils.js';
  * 
  * The function also adds on the element:
  * 1) A 'data-click-and-hold' attribute.
- * 2) A '--hold-duration' custom CSS property (measured in ms).
+ * 2) A '--hold-duration' custom CSS property (in ms).
  * 3) A 'data-active-hold' attribute during the hold phase.
  * 
- * @param {HTMLElement} rootEl
- *        The root container of the click-and-hold element. 
+ * @param {HTMLElement} btnEl
+ *        The target click-and-hold element.
  * @param {number} duration
  *        Required duration (ms) for a completed (not cancelled) hold phase.
  * @param {Callbacks}
- * @return {ClickAndHoldAPI}
+ * @return undefined
  */
-function ClickAndHold(rootEl, duration, Callbacks) {
+function ClickAndHold(btnEl, duration, Callbacks) {
     const {onHoldStart, onHoldComplete, onHoldCancel} = Callbacks;
-    const element = createButton();
     let state = initState();
     const startEventsNames = ['mousedown', 'touchstart', 'keydown'];
     const endEventsNames = ['keyup', 'blur', 'mouseup', 'mouseleave', 'mouseout', 'touchend', 'touchcancel'];
     addHoldStartListeners();
     addHoldEndListeners();
-    element.style.setProperty('--hold-duration', duration + 'ms');
-    element.setAttribute('data-click-and-hold', '');
-    rootEl.appendChild(element);
-
-    return {
-        setText,
-        setAriaLabel
-    };
-
-    function createButton() {
-        const container = document.createElement('div');
-        container.className = 'click-and-hold';
-        container.setAttribute('tabindex', '0');
-        container.setAttribute('role', 'application');
-        const containerFill = document.createElement('div');
-        containerFill.className = 'fill';
-        const containerText = document.createElement('span');
-        containerText.className = 'text';
-        container.appendChild(containerFill);
-        container.appendChild(containerText);
-
-        return container;
-    }
-
-    function setText(text) {
-        const textContainer = element.querySelector('span');
-        textContainer.textContent = text;
-    }
-
-    function setAriaLabel(text) {
-        element.setAttribute('aria-label', text);
-    }
+    btnEl.style.setProperty('--hold-duration', duration + 'ms');
+    btnEl.setAttribute('data-click-and-hold', '');
 
     function initState() {
         return {
@@ -97,15 +57,15 @@ function ClickAndHold(rootEl, duration, Callbacks) {
     }
 
     function addHoldStartListeners() {
-        startEventsNames.forEach(type => element.addEventListener(type, _onHoldStart));
+        startEventsNames.forEach(type => btnEl.addEventListener(type, _onHoldStart));
     }
 
     function removeHoldStartListeners() {
-        startEventsNames.forEach(type => element.removeEventListener(type, _onHoldStart));
+        startEventsNames.forEach(type => btnEl.removeEventListener(type, _onHoldStart));
     }
 
     function addHoldEndListeners() {
-        endEventsNames.forEach(type => element.addEventListener(type, _onHoldEnd));
+        endEventsNames.forEach(type => btnEl.addEventListener(type, _onHoldEnd));
     }
 
     function _onHoldStart(e) {
@@ -116,11 +76,11 @@ function ClickAndHold(rootEl, duration, Callbacks) {
             return;
         }
         state.eventType = e.type;
-        element.setAttribute('data-active-hold', '');
+        btnEl.setAttribute('data-active-hold', '');
         onHoldStart();
         state.durationTimeout = setTimeout(() => {
             state.completed = true;
-            element.removeAttribute('data-active-hold');
+            btnEl.removeAttribute('data-active-hold');
             onHoldComplete();
         }, duration);
         removeHoldStartListeners();
@@ -131,7 +91,7 @@ function ClickAndHold(rootEl, duration, Callbacks) {
         if ((state.eventType === 'keydown' && (e.type === 'keyup' || e.type === 'blur')) ||
             (state.eventType === 'mousedown' && ((e.type === 'mouseup' && e.button === 0) || e.type === 'mouseleave' || e.type === 'mouseout')) ||
             (state.eventType === 'touchstart' && (e.type === 'touchend' || e.type === 'touchcancel'))) {
-                element.removeAttribute('data-active-hold');
+                btnEl.removeAttribute('data-active-hold');
                 if (!state.completed) {
                     onHoldCancel();
                 }

@@ -57,13 +57,13 @@ body {
 }
 
 /* Animation using (animation.js or animationFrame.js) + CSS transition */
-[data-btn="css-transition"] .click-and-hold[data-active-hold] .fill,
-[data-btn="animationFrame-css-transition"] .click-and-hold[data-active-hold] .fill {
+[data-btn="css-transition"].click-and-hold[data-active-hold] .fill,
+[data-btn="animationFrame-css-transition"].click-and-hold[data-active-hold] .fill {
     transition: transform var(--hold-duration) linear;
     transform: translateX(100%);
 }
 
 /* Animation using animationFrame.js + CSS transform */
-[data-btn="animationFrame-css-transform"] .click-and-hold[data-active-hold] .fill {
-    transform: translateX(var(--fill-percent));
+[data-btn="animationFrame-css-transform"].click-and-hold[data-active-hold] .fill {
+    transform: translateX(var(--complete-percent));
 }
