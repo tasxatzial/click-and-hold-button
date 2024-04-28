@@ -2,16 +2,6 @@ import KeyboardUtils from './keyboardUtils.js';
 
 
 /**
- * Invoked multiple times during the hold phase. It runs ~X times per
- * second, where X matches the screen refresh rate.
- * @callback onHoldRun
- * @param {number} percent
- *        A number that indicates the percentage of the elapsed time
- *        until the hold phase is completed. Numbers will be evenly
- *        distributed between 0 and ~100.
- */
-
-/**
  * Runs when the hold phase is completed or cancelled.
  * @callback onHoldComplete
  * @param {boolean} isComplete
@@ -21,9 +11,10 @@ import KeyboardUtils from './keyboardUtils.js';
 /**
  * The returned object of {@link ClickAndHold}.
  * @typedef {Object} ClickAndHoldAPI
- * @property {Function} clear
- *           Removes the click-and-hold functionality from the element that
- *           was passed as an argument to {@link ClickAndHold}.
+ * @property {Function} setText
+ *           Sets the text of the click-and-hold element.
+ * @property {Function} setAriaLabel
+ *           Sets the aria-label of the click-and-hold element.
  */
 
 /**
@@ -43,63 +34,83 @@ import KeyboardUtils from './keyboardUtils.js';
  * 
  * The function also adds on the element:
  * 1) A 'data-click-and-hold' attribute.
- * 2) A '--hold-duration' custom css property (measured in ms).
+ * 2) A '--hold-duration' custom CSS property (measured in ms).
  * 3) A 'data-active-hold' attribute during the hold phase.
  *
- * @param {HTMLElement} element
- *        The target click-and-hold element.
- * @param {number} duration
+ * @param {HTMLElement} rootEl
+ *        The root container of the click-and-hold element. 
+* @param {number} duration
  *        Required duration (ms) for a completed (not cancelled) hold phase.
  * @param {Function} onHoldComplete
  *        Runs when the hold phase is completed or cancelled.
- * @param {Function} onHoldRun
- *        Runs during the hold phase. Optional parameter.
  * @return {ClickAndHoldAPI}
- * @throws {Error}
- *         If the element already has click-and-hold functionality.
  */
-function ClickAndHold(element, duration, onHoldComplete, onHoldRun = () => {}) {
-    element.style.setProperty('--hold-duration', duration + 'ms');
-    const animation = {};
-    const state = {};
-    const startEvents = ['mousedown', 'touchstart', 'keydown'];
-    const endEvents = ['keyup', 'blur', 'mouseup', 'mouseleave', 'mouseout', 'touchend', 'touchcancel'];
-    if (element.hasAttribute('data-click-and-hold')) {
-        throw new Error('Already a click-and-hold element');
-    }
-    resetAnimation();
+function ClickAndHold(rootEl, duration, onHoldComplete) {
+    const element = createButton();
+    let state = initState();
+    let animationState = initAnimationState();
+    const startEventsNames = ['mousedown', 'touchstart', 'keydown'];
+    const endEventsNames = ['keyup', 'blur', 'mouseup', 'mouseleave', 'mouseout', 'touchend', 'touchcancel'];
     addHoldStartListeners();
     addHoldEndListeners();
+    element.style.setProperty('--hold-duration', duration + 'ms');
     element.setAttribute('data-click-and-hold', '');
+    rootEl.appendChild(element);
+
     return {
-        clear
+        setText,
+        setAriaLabel
     };
 
-    function resetAnimation() {
-        animation.done = false;
-        animation.timerID = null;
-        animation.start = null;
-        animation.previousTimeStamp = null;
+    function createButton() {
+        const container = document.createElement('div');
+        container.className = 'click-and-hold';
+        container.setAttribute('tabindex', '0');
+        container.setAttribute('role', 'application');
+        const containerFill = document.createElement('div');
+        containerFill.className = 'fill';
+        const containerText = document.createElement('span');
+        containerText.className = 'text';
+        container.appendChild(containerFill);
+        container.appendChild(containerText);
+
+        return container;
     }
 
-    function resetState() {
-        state.eventType = null;
+    function setText(text) {
+        const textContainer = element.querySelector('span');
+        textContainer.textContent = text;
+    }
+
+    function setAriaLabel(text) {
+        element.setAttribute('aria-label', text);
+    }
+
+    function initAnimationState() {
+        return {
+            done: false,
+            timerID: null,
+            start: null,
+            previousTimeStamp: null
+        }
+    }
+
+    function initState() {
+        return {
+            eventType: null
+        }
     }
 
     function addHoldStartListeners() {
-        startEvents.forEach(type => element.addEventListener(type, onHoldStart));
+        startEventsNames.forEach(type => element.addEventListener(type, onHoldStart));
     }
 
     function removeHoldStartListeners() {
-        startEvents.forEach(type => element.removeEventListener(type, onHoldStart));
+        startEventsNames.forEach(type => element.removeEventListener(type, onHoldStart));
     }
 
     function addHoldEndListeners() {
-        endEvents.forEach(type => element.addEventListener(type, onHoldEnd));
-    }
-
-    function removeHoldEndListeners() {
-        endEvents.forEach(type => element.removeEventListener(type, onHoldEnd));
+        endEventsNames.forEach(type => element.addEventListener(type, onHoldEnd));
     }
 
     function onHoldStart(e) {
@@ -121,47 +132,39 @@ function ClickAndHold(element, duration, onHoldComplete, onHoldRun = () => {}) {
             (state.eventType === 'mousedown' && ((e.type === 'mouseup' && e.button === 0) || e.type === 'mouseleave' || e.type === 'mouseout')) ||
             (state.eventType === 'touchstart' && (e.type === 'touchend' || e.type === 'touchcancel'))) {
                 element.removeAttribute('data-active-hold');
-                if (!animation.done) {
-                    window.cancelAnimationFrame(animation.timerID);
+                if (!animationState.done) {
+                    window.cancelAnimationFrame(animationState.timerID);
                     onHoldComplete(false);
+                    element.style.setProperty('--fill-percent', '0%');
                 }
-                resetAnimation();
-                resetState();
+                animationState = initAnimationState();
+                state = initState();
                 addHoldStartListeners();
         }
     }
 
     function step(timestamp) {
-        if (animation.start === null) {
-            animation.start = timestamp;
+        if (animationState.start === null) {
+            animationState.start = timestamp;
         }
-        const elapsed = timestamp - animation.start;
-    
-        if (animation.previousTimeStamp !== timestamp) {
-            const count = (elapsed * 100 / duration).toFixed(2)
-            onHoldRun(count);
+        const elapsed = timestamp - animationState.start;
+
+        if (animationState.previousTimeStamp !== timestamp) {
+            const count = (elapsed * 100 / duration).toFixed(2);
+            element.style.setProperty('--fill-percent', count + '%');
             if (count >= 100) {
-                animation.done = true;
+                animationState.done = true;
             }
         }
         
-        if (animation.done) {
+        if (animationState.done) {
             element.removeAttribute('data-active-hold');
             onHoldComplete(true);
+            element.style.setProperty('--fill-percent', '0%');
         } else {
-            animation.previousTimeStamp = timestamp;
-            animation.timerID = window.requestAnimationFrame(step);
+            animationState.previousTimeStamp = timestamp;
+            animationState.timerID = window.requestAnimationFrame(step);
         }
-    }
-
-    function clear() {
-        element.removeAttribute('data-active-hold');
-        element.removeAttribute('data-click-and-hold');
-        removeHoldEndListeners();
-        removeHoldStartListeners();
-        window.cancelAnimationFrame(animation.timerID);
-        resetAnimation();
-        resetState();
     }
 }
 

@@ -9,51 +9,53 @@ const state = {
 const holdDuration = 500; // 500ms
 
 /* Set the initial background color of body */
-setBodyColor();
+updateBodyColor();
 
 /* CSS transition */
-const btn1El = document.querySelector('.click-and-hold.animation[data-btn="1"]');
 const btn1 = Animation(
-    btn1El,
+    document.querySelector('[data-btn="css-transition"]'),
     holdDuration,
     (isComplete) => {
         if (isComplete) {
             state.activeColor++;
-            setBodyColor();
+            updateBodyColor();
         }
     }
 );
+
+btn1.setText('CSS animation');
+btn1.setAriaLabel('Click and hold button');
 
 /* requestAnimationFrame + CSS transform */
-const btn2El = document.querySelector('.click-and-hold.animation-frame[data-btn="2"]');
 const btn2 = AnimationFrame(
-    btn2El,
+    document.querySelector('[data-btn="animationFrame-css-transform"]'),
     holdDuration,
     (isComplete) => {
-        btn2El.style.setProperty('--bg-fill', '0%');
         if (isComplete) {
             state.activeColor++;
-            setBodyColor();
+            updateBodyColor();
         }
-    },
-    (percent) => {
-        btn2El.style.setProperty('--bg-fill', percent + '%');
     }
 );
 
+btn2.setText('Animation frame + CSS transform');
+btn2.setAriaLabel('Click and hold button');
+
 /* requestAnimationFrame + CSS transition */
-const btn3El = document.querySelector('.click-and-hold.animation-frame[data-btn="3"]');
 const btn3 = AnimationFrame(
-    btn3El,
+    document.querySelector('[data-btn="animationFrame-css-transition"]'),
     holdDuration,
     (isComplete) => {
         if (isComplete) {
             state.activeColor++;
-            setBodyColor();
+            updateBodyColor();
         }
     },
 );
 
-function setBodyColor() {
-    document.body.style.setProperty('--bg-clr', COLORS[state.activeColor % COLORS.length]);
+btn3.setText('Animation frame + CSS transition');
+btn3.setAriaLabel('Click and hold button');
+
+function updateBodyColor() {
+    document.body.style.setProperty('--body-bg-clr', COLORS[state.activeColor % COLORS.length]);
 }
