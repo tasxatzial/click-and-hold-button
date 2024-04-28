@@ -51,7 +51,7 @@ function ClickAndHold(btnEl, duration, Callbacks) {
 
     function initState() {
         return {
-            eventType: null,
+            event: null,
             completed: false
         }
     }
@@ -75,25 +75,25 @@ function ClickAndHold(btnEl, duration, Callbacks) {
         if (e.type === 'mousedown' && e.button !== 0) {
             return;
         }
-        state.eventType = e.type;
+        state.event = e;
         btnEl.setAttribute('data-active-hold', '');
-        onHoldStart();
+        onHoldStart(e);
         state.durationTimeout = setTimeout(() => {
             state.completed = true;
             btnEl.removeAttribute('data-active-hold');
-            onHoldComplete();
+            onHoldComplete(e);
         }, duration);
         removeHoldStartListeners();
     }
 
     function _onHoldEnd(e) {
         e.preventDefault();
-        if ((state.eventType === 'keydown' && (e.type === 'keyup' || e.type === 'blur')) ||
-            (state.eventType === 'mousedown' && ((e.type === 'mouseup' && e.button === 0) || e.type === 'mouseleave' || e.type === 'mouseout')) ||
-            (state.eventType === 'touchstart' && (e.type === 'touchend' || e.type === 'touchcancel'))) {
+        if ((state.event?.type === 'keydown' && (e.type === 'keyup' || e.type === 'blur')) ||
+            (state.event?.type === 'mousedown' && ((e.type === 'mouseup' && e.button === 0) || e.type === 'mouseleave' || e.type === 'mouseout')) ||
+            (state.event?.type === 'touchstart' && (e.type === 'touchend' || e.type === 'touchcancel'))) {
                 btnEl.removeAttribute('data-active-hold');
                 if (!state.completed) {
-                    onHoldCancel();
+                    onHoldCancel(e);
                 }
                 clearTimeout(state.durationTimeout);
                 state = initState();

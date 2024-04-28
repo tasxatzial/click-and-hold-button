@@ -2,16 +2,6 @@
     box-sizing: border-box;
 }
 
-body {
-    display: flex;
-    flex-direction: column;
-    gap: 3rem;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-}
-
 [data-btn="css-transition"] {
     --bg-clr: hsl(50, 85%, 90%);
     --hover-clr: hsl(50, 85%, 80%);
@@ -30,14 +20,46 @@ body {
     --fill-clr: hsl(0, 85%, 70%);
 }
 
+body {
+    font-family: sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 4rem;
+    margin-top: 3rem;
+}
+
+.events-container {
+    width: 10rem;
+}
+
+.events-title {
+    font-size: 2rem;
+    margin: 0;
+}
+
+.event-text {
+    background-color: var(--bg-clr);
+    font-size: 1.25rem;
+    white-space: nowrap;
+}
+
+.btns-container {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    justify-content: center;
+    align-items: center;
+}
+
 .click-and-hold {
     position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 10;
-    width: 15rem;
-    height: 15rem;
+    width: 12rem;
+    height: 12rem;
     padding: 1em;
     border: 1px solid rgb(0 0 0 / 0.2);
     border-radius: 5px;
@@ -65,7 +87,7 @@ body {
 
 .click-and-hold .text {
     text-align: center;
-    font-size: 2rem;
+    font-size: 1.75rem;
 }
 
 .click-and-hold[data-active-hold] {

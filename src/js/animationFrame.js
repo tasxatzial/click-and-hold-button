@@ -63,7 +63,7 @@ function ClickAndHold(btnEl, duration, Callbacks) {
 
     function initState() {
         return {
-            eventType: null
+            event: null
         }
     }
 
@@ -86,23 +86,23 @@ function ClickAndHold(btnEl, duration, Callbacks) {
         if (e.type === 'mousedown' && e.button !== 0) {
             return;
         }
-        state.eventType = e.type;
+        state.event = e;
         removeHoldStartListeners();
         btnEl.setAttribute('data-active-hold', '');
-        onHoldStart();
+        onHoldStart(e);
         window.requestAnimationFrame(step);
     }
 
     function _onHoldEnd(e) {
         e.preventDefault();
-        if ((state.eventType === 'keydown' && (e.type === 'keyup' || e.type === 'blur')) ||
-            (state.eventType === 'mousedown' && ((e.type === 'mouseup' && e.button === 0) || e.type === 'mouseleave' || e.type === 'mouseout')) ||
-            (state.eventType === 'touchstart' && (e.type === 'touchend' || e.type === 'touchcancel'))) {
+        if ((state.event?.type === 'keydown' && (e.type === 'keyup' || e.type === 'blur')) ||
+            (state.event?.type === 'mousedown' && ((e.type === 'mouseup' && e.button === 0) || e.type === 'mouseleave' || e.type === 'mouseout')) ||
+            (state.event?.type === 'touchstart' && (e.type === 'touchend' || e.type === 'touchcancel'))) {
                 btnEl.removeAttribute('data-active-hold');
                 btnEl.style.setProperty('--complete-percent', '0%');
                 if (!animationState.done) {
                     window.cancelAnimationFrame(animationState.timerID);
-                    onHoldCancel();
+                    onHoldCancel(e);
                 }
                 animationState = initAnimationState();
                 state = initState();
@@ -127,7 +127,7 @@ function ClickAndHold(btnEl, duration, Callbacks) {
         if (animationState.done) {
             btnEl.removeAttribute('data-active-hold');
             btnEl.style.setProperty('--complete-percent', '0%');
-            onHoldComplete();
+            onHoldComplete(state.event);
         } else {
             animationState.previousTimeStamp = timestamp;
             animationState.timerID = window.requestAnimationFrame(step);
