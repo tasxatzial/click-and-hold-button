@@ -41,13 +41,13 @@ import KeyboardUtils from './keyboardUtils.js';
  */
 function ClickAndHold(btnEl, duration, Callbacks) {
     const {onHoldStart, onHoldComplete, onHoldCancel} = Callbacks;
-    let state = initState();
     const startEventsNames = ['mousedown', 'touchstart', 'keydown'];
     const endEventsNames = ['keyup', 'blur', 'mouseup', 'mouseleave', 'touchend', 'touchcancel'];
-    addHoldStartListeners();
-    addHoldEndListeners();
+    let state = initState();
     btnEl.style.setProperty('--hold-duration', duration + 'ms');
     btnEl.setAttribute('data-click-and-hold', '');
+    addHoldEndListeners();
+    addHoldStartListeners();
 
     function initState() {
         return {
