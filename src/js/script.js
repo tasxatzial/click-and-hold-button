@@ -23,8 +23,8 @@ AnimationFrame(btn3El, holdDuration, callbacks);
 /* ----------------------------------------------------------------*/
 /* update DOM and display event */
 
-const maxEventsToShow = 12;
-const events = document.querySelector('.events');
+const maxEventsToShow = 5;
+const events = document.querySelector('.events-container');
 
 function initInsertEvent(id) {
     return function(e, name) {
