@@ -22,7 +22,7 @@ import KeyboardUtils from './keyboardUtils.js';
  * 
  * The action can be cancelled by:
  * 1) A 'keyup' or 'blur' event if the action was initiated by a 'keydown' event.
- * 2) A 'mouseup' or 'mouseleave' or 'mouseout' event if the action was initiated
+ * 2) A 'mouseup' or 'mouseleave' event if the action was initiated
  * by a 'mousedown' event.
  * 3) A 'touchend' or 'touchcancel' event if the action was initiated by a
  * 'touchstart' event.
@@ -46,7 +46,7 @@ function ClickAndHold(btnEl, duration, Callbacks) {
     let state = initState();
     let animationState = initAnimationState();
     const startEventsNames = ['mousedown', 'touchstart', 'keydown'];
-    const endEventsNames = ['keyup', 'blur', 'mouseup', 'mouseleave', 'mouseout', 'touchend', 'touchcancel'];
+    const endEventsNames = ['keyup', 'blur', 'mouseup', 'mouseleave', 'touchend', 'touchcancel'];
     addHoldStartListeners();
     addHoldEndListeners();
     btnEl.style.setProperty('--hold-duration', duration + 'ms');
@@ -97,7 +97,7 @@ function ClickAndHold(btnEl, duration, Callbacks) {
     function _onHoldEnd(e) {
         e.preventDefault();
         if ((state.event?.type === 'keydown' && (e.type === 'keyup' || e.type === 'blur')) ||
-            (state.event?.type === 'mousedown' && ((e.type === 'mouseup' && e.button === 0) || e.type === 'mouseleave' || e.type === 'mouseout')) ||
+            (state.event?.type === 'mousedown' && ((e.type === 'mouseup' && e.button === 0) || e.type === 'mouseleave')) ||
             (state.event?.type === 'touchstart' && (e.type === 'touchend' || e.type === 'touchcancel'))) {
                 btnEl.removeAttribute('data-active-hold');
                 btnEl.style.setProperty('--complete-percent', '0%');
