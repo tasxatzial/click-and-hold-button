@@ -69,13 +69,13 @@ function ClickAndHold(btnEl, duration, Callbacks) {
     }
 
     function _onHoldStart(e) {
-        e.preventDefault();
         if (e.type === 'keydown' && !KeyboardUtils.is_Space(e)) {
             return;
         }
         if (e.type === 'mousedown' && e.button !== 0) {
             return;
         }
+        e.preventDefault();
         state.event = e;
         btnEl.setAttribute('data-active-hold', '');
         onHoldStart(e);
