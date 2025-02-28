@@ -4,6 +4,8 @@ A click-and-hold button is a user interface element that demands users to click 
 
 This project demonstrates how to add basic click-and-hold functionality to elements using plain JavaScript. Mouse, keyboard, and touch events are supported.
 
+[Live version](https://tasxatzial.github.io/click-and-hold-button/src/index.html)
+
 ## Implementation
 
 Two implementations, `animation.js` and `animationFrame.js` are provided.
